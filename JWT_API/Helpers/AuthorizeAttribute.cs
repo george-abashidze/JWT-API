@@ -31,21 +31,10 @@ namespace JWT_API.Helpers
                 return;
             }
 
-            //check hierarchy of roles
-            //for example admin must see User content also
-            //or power user must see both user and admin content also
+            //if role required
             if (_roleName != null) {
 
                 var hasClaim = user.Roles.Any(r => r.Name.Equals(_roleName));
-
-                if (!hasClaim && _roleName.Equals(Enum.GetName(typeof(Role), Role.User)))
-                {
-                    hasClaim = user.Roles.Any(r => r.Name.Equals(Enum.GetName(typeof(Role), Role.Admin)) || r.Name.Equals(Enum.GetName(typeof(Role), Role.PowerUser)));
-                }
-                else if (!hasClaim && _roleName.Equals(Enum.GetName(typeof(Role), Role.Admin)))
-                {
-                    hasClaim = user.Roles.Any(r => r.Name.Equals(Enum.GetName(typeof(Role), Role.PowerUser)));
-                }
 
                 if (!hasClaim)
                 {
