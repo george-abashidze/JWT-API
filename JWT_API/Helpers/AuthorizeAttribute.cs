@@ -9,11 +9,11 @@ namespace JWT_API.Helpers
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
-        readonly Claim? _claim;
+        readonly string? _roleName;
 
-        public AuthorizeAttribute(string claimType, string claimValue)
+        public AuthorizeAttribute(string roleName)
         {
-            _claim = new Claim(claimType, claimValue);
+            _roleName= roleName;
         }
 
         public AuthorizeAttribute()
@@ -34,15 +34,15 @@ namespace JWT_API.Helpers
             //check hierarchy of roles
             //for example admin must see User content also
             //or power user must see both user and admin content also
-            if (_claim != null) {
+            if (_roleName != null) {
 
-                var hasClaim = user.Roles.Any(r => r.Name.Equals(_claim.Value));
+                var hasClaim = user.Roles.Any(r => r.Name.Equals(_roleName));
 
-                if (!hasClaim && _claim.Value.Equals(Enum.GetName(typeof(Role), Role.User)))
+                if (!hasClaim && _roleName.Equals(Enum.GetName(typeof(Role), Role.User)))
                 {
                     hasClaim = user.Roles.Any(r => r.Name.Equals(Enum.GetName(typeof(Role), Role.Admin)) || r.Name.Equals(Enum.GetName(typeof(Role), Role.PowerUser)));
                 }
-                else if (!hasClaim && _claim.Value.Equals(Enum.GetName(typeof(Role), Role.Admin)))
+                else if (!hasClaim && _roleName.Equals(Enum.GetName(typeof(Role), Role.Admin)))
                 {
                     hasClaim = user.Roles.Any(r => r.Name.Equals(Enum.GetName(typeof(Role), Role.PowerUser)));
                 }
