@@ -7,9 +7,8 @@ namespace JWT_API.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    //only for PowerUser Role
-    //[ClaimRequirement(ClaimTypes.Role,"PowerUser")] 
-    //for any authorized user
+    //[Authorize(ClaimTypes.Role, "PowerUser")]
+    //or
     [Authorize]
     public class WeatherForecastController : ControllerBase
     {
