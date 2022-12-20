@@ -30,7 +30,6 @@ if (String.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<ApplicationDbContext>(
         options => options.UseNpgsql(connectionString));
 
-builder.Services.AddSingleton<PowerUserConfig>(powerUserConfig);
 builder.Services.AddSingleton<JwtTokenConfig>(jwtTokenConfig);
 
     builder.Services.AddAuthentication(x =>
@@ -92,7 +91,7 @@ var poweruser = new UserEntity
     Email = powerUserConfig.Email.Trim().ToLower(),
     FirstName = powerUserConfig.FirstName,
     PhoneNumber = powerUserConfig.PhoneNumber,
-    PasswordHash = PasswordHelper.GetStringHash(powerUserConfig.Password, jwtTokenConfig.Secret),
+    PasswordHash = HashUtil.GetStringHash(powerUserConfig.Password, jwtTokenConfig.Secret),
     LastName = powerUserConfig.LastName
 };
 

@@ -15,6 +15,8 @@ namespace JWT_API.Controllers
         ApplicationDbContext _db;
         IJwtAuthManager _jwtManager;
         JwtTokenConfig _jwtConfig;
+
+
         public AuthController(ApplicationDbContext db, IJwtAuthManager jwtManager,JwtTokenConfig jwtConfig) { 
             _db= db;
             _jwtManager= jwtManager;
@@ -27,10 +29,10 @@ namespace JWT_API.Controllers
 
             var user = await _db.Users.Include(u => u.Roles).FirstOrDefaultAsync(u =>
             u.Email.Equals(request.Email.Trim().ToLower()) &&
-            u.PasswordHash.Equals(PasswordHelper.GetStringHash(request.Password,_jwtConfig.Secret)));
+            u.PasswordHash.Equals(HashUtil.GetStringHash(request.Password,_jwtConfig.Secret)));
 
             if (user == null)
-                return BadRequest();
+                return NotFound();
 
             ClaimsIdentity claimsIdentity = new();
 
