@@ -18,7 +18,6 @@ namespace JWT_API.Controllers
         JwtTokenConfig _jwtConfig;
         SignUpConfig _signUpConfig;
 
-
         public AuthController(ApplicationDbContext db, IJwtAuthManager jwtManager,JwtTokenConfig jwtConfig, SignUpConfig signUpConfig) { 
             _db= db;
             _jwtManager= jwtManager;
