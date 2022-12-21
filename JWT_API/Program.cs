@@ -18,8 +18,10 @@ var powerUserConfig = builder.Configuration.GetSection("PowerUser").Get<PowerUse
 //jwt config
 var jwtTokenConfig = builder.Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
 
+//sign up config
+var signUpConfig = builder.Configuration.GetSection("SignUpConfig").Get<SignUpConfig>();
 
-if (jwtTokenConfig == null || powerUserConfig == null)
+if (jwtTokenConfig == null || powerUserConfig == null || signUpConfig == null)
     return;
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -32,7 +34,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 builder.Services.AddSingleton<JwtTokenConfig>(jwtTokenConfig);
 
-    builder.Services.AddAuthentication(x =>
+builder.Services.AddSingleton<SignUpConfig>(signUpConfig);
+
+builder.Services.AddAuthentication(x =>
     {
         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

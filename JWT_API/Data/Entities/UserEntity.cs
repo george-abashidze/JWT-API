@@ -26,6 +26,8 @@ namespace JWT_API.Data.Entities
         [JsonIgnore]
         [Required]
         public string PasswordHash { get; set; }
+
+        public bool EmailConfirmed { get; set; }
         
         public ICollection<RoleEntity> Roles { get; set; }
     }

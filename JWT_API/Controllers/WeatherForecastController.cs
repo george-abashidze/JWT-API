@@ -7,9 +7,9 @@ namespace JWT_API.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    //[Authorize(roleName:"PowerUser")]
+    [Authorize(roleName:"PowerUser")]
     //or
-    [Authorize]
+    //[Authorize]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

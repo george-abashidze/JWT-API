@@ -21,8 +21,8 @@ namespace JWT_API.Data
 
             builder.Entity<UserEntity>(entity => {
                 entity.HasIndex(u => u.Email).IsUnique();
-                entity.HasIndex(u => u.PhoneNumber).IsUnique();
                 entity.HasMany(u => u.Roles).WithMany();
+                entity.Property(u => u.EmailConfirmed).HasDefaultValue(false);
             });
  
         }
