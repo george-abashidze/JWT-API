@@ -93,7 +93,13 @@ namespace JWT_API.Controllers
             {
                 return BadRequest("Error");
             }
-           
+
+            if (_signUpConfig.RequireEmailComfirmation) {
+                //TODO: send email confirmation code
+                return Ok("Confirmation code sent to the email.");
+            }
+                
+
             return Ok("Success");
 
         }
