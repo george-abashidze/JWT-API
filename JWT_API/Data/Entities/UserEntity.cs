@@ -27,7 +27,11 @@ namespace JWT_API.Data.Entities
         [Required]
         public string PasswordHash { get; set; }
 
-        public bool EmailConfirmed { get; set; }
+        public bool AccountConfirmed { get; set; }
+
+        public DateTime? ConfirmationSentAt { get; set; }
+
+        public int? SecurityCodeHash { get; set; } 
         
         public ICollection<RoleEntity> Roles { get; set; }
     }

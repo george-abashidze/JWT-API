@@ -4,6 +4,6 @@
     {
         public int MinPasswordLength { get; set; }
         public bool ShouldContainNumber { get; set; }
-        public bool RequireEmailComfirmation { get; set; }
+        public bool RequireAccountComfirmation { get; set; }
     }
 }

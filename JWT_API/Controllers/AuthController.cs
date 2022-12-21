@@ -3,6 +3,7 @@ using JWT_API.Data.Entities;
 using JWT_API.Enums;
 using JWT_API.Helpers;
 using JWT_API.Models.Request;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -17,12 +18,14 @@ namespace JWT_API.Controllers
         IJwtAuthManager _jwtManager;
         JwtTokenConfig _jwtConfig;
         SignUpConfig _signUpConfig;
+        IHttpContextAccessor _httpContextAccessor;
 
-        public AuthController(ApplicationDbContext db, IJwtAuthManager jwtManager,JwtTokenConfig jwtConfig, SignUpConfig signUpConfig) { 
+        public AuthController(ApplicationDbContext db, IJwtAuthManager jwtManager,JwtTokenConfig jwtConfig, SignUpConfig signUpConfig, IHttpContextAccessor httpContextAccessor) { 
             _db= db;
             _jwtManager= jwtManager;
             _jwtConfig= jwtConfig;
             _signUpConfig= signUpConfig;
+            _httpContextAccessor= httpContextAccessor;
         }
 
         [HttpPost]
@@ -36,8 +39,8 @@ namespace JWT_API.Controllers
             if (user == null)
                 return NotFound();
 
-            if (_signUpConfig.RequireEmailComfirmation && !user.EmailConfirmed) {
-                return Ok("Email cofirmation required.");
+            if (_signUpConfig.RequireAccountComfirmation && !user.AccountConfirmed) {
+                return Ok("Account cofirmation required.");
             }
 
             ClaimsIdentity claimsIdentity = new();
@@ -52,7 +55,27 @@ namespace JWT_API.Controllers
                 User = user,
                 Token = _jwtManager.GenerateToken(claimsIdentity.Claims.ToArray(), DateTime.Now)
             });
+        }
 
+        [HttpGet]
+        [Route("/GetUser")]
+        [Authorize]
+        public async Task<IActionResult> GetUser() {
+
+            try
+            {
+                var user = (UserEntity)_httpContextAccessor.HttpContext.Items["User"];
+
+                if (user == null)
+                    return NotFound();
+
+                return Ok(user);
+            }
+            catch(Exception ex) {
+
+                return NotFound();
+            }
+            
         }
 
 
@@ -93,9 +116,9 @@ namespace JWT_API.Controllers
                 return BadRequest("Error");
             }
 
-            if (_signUpConfig.RequireEmailComfirmation) {
+            if (_signUpConfig.RequireAccountComfirmation) {
                 //TODO: send email confirmation code
-                return Ok("Confirmation code sent to the email.");
+                return Ok("Confirmation code sent.");
             }
                 
 

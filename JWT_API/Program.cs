@@ -60,6 +60,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddSingleton<IJwtAuthManager, JWTAuthManager>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
